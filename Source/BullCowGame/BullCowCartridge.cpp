@@ -4,12 +4,14 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-    PrintLine(TEXT("Welcome to the Bull Cow game!"));
 
     SetupGame();
-    PrintLine(TEXT("Guess the 5 letter word")); // remove the number later
 
-    PrintLine(TEXT("Print something and hit enter"));
+    PrintLine(TEXT("The HiddenWord is: %s"), *HiddenWord); // Debug line
+
+    PrintLine(TEXT("Welcome to the Bull Cow game!"));
+    PrintLine(TEXT("Guess the %i letter word"), PlayerLives); // remove the number later
+    PrintLine(TEXT("Type in you guess and press enter"));
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -23,9 +25,15 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     {
         PlayerLives--;
         PrintLine(TEXT("You guessed WRONG!"));
+        if (Input.Len() != HiddenWord.Len())
+        {
+            PrintLine(TEXT("You have entered the wrong number of"));
+            PrintLine(TEXT("characters!"));
+        }
+
         if (PlayerLives <= 0)
         {
-            PrintLine(TEXT("You have lost the game :'("));
+            PrintLine(TEXT("You have ran out of lives"));
             // ask player to try again
         }
     }
@@ -33,6 +41,6 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 
 void UBullCowCartridge::SetupGame()
 {
-    HiddenWord = TEXT("steak"); // generate random word
-    PlayerLives = 5; // assign lives (lives = word size)
+    HiddenWord = TEXT("garden"); // generate random word
+    PlayerLives = HiddenWord.Len(); // assign lives (lives = word size)
 }
